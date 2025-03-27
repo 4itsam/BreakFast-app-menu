@@ -29,14 +29,20 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: appBar(context),
       backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+
+      body: ListView(
+        physics: const NeverScrollableScrollPhysics(),
         children: [
-          _searchBox(),
-          const SizedBox(height: 72),
-          categoriesSection(context),
-          const SizedBox(height: 50),
-          popularFoodSection(context),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _searchBox(),
+              const SizedBox(height: 72),
+              categoriesSection(context),
+              const SizedBox(height: 50),
+              popularFoodSection(context),
+            ],
+          ),
         ],
       ),
     );
@@ -53,12 +59,12 @@ class _HomePageState extends State<HomePage> {
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Container(
           height: 230,
           color: const Color.fromARGB(255, 255, 255, 255),
           child: ListView.builder(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: foodModels.length,
             itemBuilder: (BuildContext context, int index) {
@@ -90,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                       width: 125,
                       child: TextButton(
                         style: ButtonStyle(
-                          shadowColor: WidgetStatePropertyAll(Colors.black),
+                          shadowColor: const WidgetStatePropertyAll(Colors.black),
                           backgroundColor: WidgetStateProperty.all(
                             Colors.white,
                           ),
@@ -166,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Text(
                         category[index].title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: "sand",
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -281,7 +287,7 @@ class _HomePageState extends State<HomePage> {
       ),
       actions: [
         GestureDetector(
-          onTap: () {},
+          onTap: () => _showDialog(context),
           child: Container(
             margin: const EdgeInsets.all(10),
             height: 40,
@@ -318,7 +324,7 @@ void _showBottomSheet(
       width: double.infinity,
       decoration: BoxDecoration(
         color: colorBox,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
       ),
 
       child: Padding(
@@ -330,22 +336,22 @@ void _showBottomSheet(
                 Container(
                   height: 150,
                   width: 150,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(photo, height: 100, width: 100),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontFamily: "sand", fontSize: 35),
+                      style: const TextStyle(fontFamily: "sand", fontSize: 35),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6, top: 8),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 6, top: 8),
                       child: Text(
                         "90% OF people Like it\nBuy now and get\n40% discount",
                         style: TextStyle(fontSize: 15),
@@ -355,14 +361,15 @@ void _showBottomSheet(
                 ),
               ],
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             SizedBox(
               height: 50,
               width: 200,
               child: TextButton(
                 style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    const Color.fromARGB(255, 255, 255, 255),
+                  overlayColor: WidgetStatePropertyAll(colorBox),
+                  backgroundColor: const WidgetStatePropertyAll(
+                    Color.fromARGB(255, 255, 255, 255),
                   ),
                 ),
                 onPressed: () {},
@@ -389,11 +396,52 @@ void _snackbar(
     SnackBar(
       showCloseIcon: true,
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       dismissDirection: DismissDirection.horizontal,
       backgroundColor: colorBox,
-      content: Row(children: [Text(title),SizedBox(width: 15,), Image.asset(image)]),
+      content: Row(
+        children: [Text(title), const SizedBox(width: 15), Image.asset(image)],
+      ),
     ),
+  );
+}
+
+void _showDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder:
+        (context) => AlertDialog(
+          title: Text(
+            "Ali Miri",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          titlePadding: const EdgeInsets.all(25),
+          backgroundColor: Colors.white,
+          
+          actions: [
+            
+            TextButton(
+              style: const ButtonStyle(
+                overlayColor: WidgetStatePropertyAll(
+                  Color.fromARGB(50, 226, 226, 226),
+                ),
+                backgroundColor: WidgetStatePropertyAll(Colors.white),
+              ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close", style: TextStyle(color: Colors.black)),
+            ),
+                        TextButton(
+              style: const ButtonStyle(
+                overlayColor: WidgetStatePropertyAll(
+                  Color.fromARGB(50, 226, 226, 226),
+                ),
+                backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 12, 12, 30)),
+              ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close", style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+            ),
+          ],
+        ),
   );
 }
