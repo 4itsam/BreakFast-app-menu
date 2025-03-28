@@ -18,7 +18,7 @@ class PopularFoodModels {
 
     foodModels.add(
       PopularFoodModels(
-        colorBox: Color.fromARGB(82, 255, 128, 0),
+        colorBox: Color.fromARGB(100, 255, 128, 0),
         title: "Toast Egg",
         isSelected: true,
         image: "assets/images/egg.png"
@@ -26,7 +26,7 @@ class PopularFoodModels {
     );
         foodModels.add(
       PopularFoodModels(
-        colorBox: Color.fromARGB(82,0, 255 ,98),
+        colorBox: Color.fromARGB(100,0, 255 ,98),
         title: "Tea",
         isSelected: true,
         image: "assets/images/tea.png"
