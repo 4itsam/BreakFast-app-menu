@@ -210,10 +210,12 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-
         child: TextField(
-          cursorHeight: 0,
-
+          
+          cursorHeight: 30,
+          cursorColor: const Color.fromARGB(255, 32, 32, 32),
+          style: const TextStyle(fontFamily: "sand",fontSize: 15,fontWeight: FontWeight.bold),
+        
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -245,13 +247,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            contentPadding: const EdgeInsetsDirectional.only(bottom: 100),
-
+            contentPadding: const EdgeInsetsDirectional.only(bottom: 20),
+        
             hintText: "search",
-
+        
             hintStyle: const TextStyle(
               fontFamily: "sand",
-              color: Colors.black,
+              color: Color.fromARGB(255, 68, 68, 68),
               fontSize: 12,
             ),
           ),
@@ -413,7 +415,7 @@ void _showDialog(BuildContext context) {
     builder:
         (context) => AlertDialog(
           title: Text(
-            "Ali Miri",
+            "it's Ali",
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           titlePadding: const EdgeInsets.all(25),
