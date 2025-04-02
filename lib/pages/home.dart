@@ -3,6 +3,13 @@ import 'package:breakfast/models/categorize_models.dart';
 import 'package:breakfast/models/popular_food_models.dart';
 import 'package:flutter/material.dart';
 
+
+
+  void _getPopularFood() {
+    foodModels = PopularFoodModels.getPopularFood();
+  }
+  List<PopularFoodModels> foodModels = [];
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -12,11 +19,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<CategoryModels> category = [];
-  List<PopularFoodModels> foodModels = [];
 
-  void _getPopularFood() {
-    foodModels = PopularFoodModels.getPopularFood();
-  }
+
+
 
   void _getCategory() {
     category = CategoryModels.getCategoryModels();
@@ -31,21 +36,81 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
 
       body: ListView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _searchBox(),
-              const SizedBox(height: 72),
+              const SizedBox(height: 20),
               categoriesSection(context),
-              const SizedBox(height: 50),
+              const SizedBox(height: 20),
               popularFoodSection(context),
+              const SizedBox(height: 20,),
+              blog(context),
             ],
           ),
         ],
       ),
     );
+  }
+
+  Column blog(BuildContext context) {
+    return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text(
+                    "blog",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  child: ListView.separated(
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 65,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 238, 238, 238),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                "5 Helthy food who you don't now !",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration:const BoxDecoration(
+                                  boxShadow: [BoxShadow(blurRadius: 1,color:  Color.fromARGB(146, 155, 155, 155),blurStyle: BlurStyle.normal,spreadRadius: 1)],
+                                  shape: BoxShape.circle,
+                                  color: Color.fromARGB(255, 221, 221, 221),
+                                ),
+                                child: const Icon(Icons.ads_click),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder:
+                        (BuildContext context, int index) =>
+                            const SizedBox(height: 10),
+                    itemCount: 3,
+                  ),
+                ),
+              ],
+            );
   }
 
   Column popularFoodSection(BuildContext context) {
@@ -55,7 +120,7 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.only(left: 15),
           child: Text(
-            "Popular\nfood",
+            "recommended",
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
@@ -96,7 +161,9 @@ class _HomePageState extends State<HomePage> {
                       width: 125,
                       child: TextButton(
                         style: ButtonStyle(
-                          shadowColor: const WidgetStatePropertyAll(Colors.black),
+                          shadowColor: const WidgetStatePropertyAll(
+                            Colors.black,
+                          ),
                           backgroundColor: WidgetStateProperty.all(
                             Colors.white,
                           ),
@@ -104,9 +171,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed:
                             () => _showBottomSheet(
                               context,
-                              colorBox: foodModels[index].colorBox,
-                              photo: foodModels[index].image,
-                              title: foodModels[index].title,
+                           index: index
                             ),
                         child: Text(
                           "View",
@@ -194,7 +259,7 @@ class _HomePageState extends State<HomePage> {
 
   Padding _searchBox() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(56, 48, 56, 0),
+      padding: const EdgeInsets.fromLTRB(56, 28, 56, 0),
       child: Container(
         height: 50,
         width: double.infinity,
@@ -211,11 +276,14 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         child: TextField(
-          
           cursorHeight: 30,
           cursorColor: const Color.fromARGB(255, 32, 32, 32),
-          style: const TextStyle(fontFamily: "sand",fontSize: 15,fontWeight: FontWeight.bold),
-        
+          style: const TextStyle(
+            fontFamily: "sand",
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -248,9 +316,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             contentPadding: const EdgeInsetsDirectional.only(bottom: 20),
-        
+
             hintText: "search",
-        
+
             hintStyle: const TextStyle(
               fontFamily: "sand",
               color: Color.fromARGB(255, 68, 68, 68),
@@ -268,6 +336,7 @@ class _HomePageState extends State<HomePage> {
         "BreakFast",
         style: Theme.of(context).textTheme.headlineLarge,
       ),
+      
 
       centerTitle: true,
       backgroundColor: Colors.white,
@@ -316,16 +385,18 @@ class _HomePageState extends State<HomePage> {
 
 void _showBottomSheet(
   BuildContext context, {
-  required colorBox,
-  required photo,
-  required title,
+index
 }) {
   Scaffold.of(context).showBottomSheet(
+    sheetAnimationStyle: AnimationStyle(duration: const Duration(milliseconds: 750)),
+    showDragHandle: true,
+    backgroundColor: Colors.white,
+    
     (context) => Container(
       height: 280,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: colorBox,
+        color: foodModels[index].colorBox,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
       ),
 
@@ -342,14 +413,14 @@ void _showBottomSheet(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: Image.asset(photo, height: 100, width: 100),
+                  child: Image.asset(foodModels[index].image, height: 100, width: 100),
                 ),
                 const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      foodModels[index].title,
                       style: const TextStyle(fontFamily: "sand", fontSize: 35),
                     ),
                     const Padding(
@@ -369,7 +440,7 @@ void _showBottomSheet(
               width: 200,
               child: TextButton(
                 style: ButtonStyle(
-                  overlayColor: WidgetStatePropertyAll(colorBox),
+                  overlayColor: WidgetStatePropertyAll(foodModels[index].colorBox),
                   backgroundColor: const WidgetStatePropertyAll(
                     Color.fromARGB(255, 255, 255, 255),
                   ),
@@ -414,15 +485,11 @@ void _showDialog(BuildContext context) {
     context: context,
     builder:
         (context) => AlertDialog(
-          title: Text(
-            "it's Ali",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          title: Text("it's Ali", style: Theme.of(context).textTheme.bodyLarge),
           titlePadding: const EdgeInsets.all(25),
           backgroundColor: Colors.white,
-          
+
           actions: [
-            
             TextButton(
               style: const ButtonStyle(
                 overlayColor: WidgetStatePropertyAll(
@@ -433,15 +500,20 @@ void _showDialog(BuildContext context) {
               onPressed: () => Navigator.pop(context),
               child: const Text("Close", style: TextStyle(color: Colors.black)),
             ),
-                        TextButton(
+            TextButton(
               style: const ButtonStyle(
                 overlayColor: WidgetStatePropertyAll(
                   Color.fromARGB(50, 226, 226, 226),
                 ),
-                backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 12, 12, 30)),
+                backgroundColor: WidgetStatePropertyAll(
+                  Color.fromARGB(255, 12, 12, 30),
+                ),
               ),
               onPressed: () => Navigator.pop(context),
-              child: const Text("Close", style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+              child: const Text(
+                "Close",
+                style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+              ),
             ),
           ],
         ),
